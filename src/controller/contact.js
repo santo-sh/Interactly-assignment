@@ -19,8 +19,7 @@ const Query = (query) => {
 
 const getContact = async (req, res) => {
   try {
-    
-    const {contact_id, data_store} = req.body;
+    const { contact_id, data_store } = req.body;
 
     if (!contact_id) {
       throw { message: `Contact id is required!` };
@@ -49,18 +48,19 @@ const getContact = async (req, res) => {
       return res.status(200).send({ err: false, data: user });
     }
 
-    const response = await axios.get(`${freshwork_filterUrl}?q=${contact_id}&include=contact`
-    , {
-      headers: {
-        Authorization: `Token token=${token}`,
-      },
-    });
-
-
-    if(!response.data.length){
-      throw {
-        message: 'Given contact id is not present in CRM!!'
+    const response = await axios.get(
+      `${freshwork_filterUrl}?q=${contact_id}&include=contact`,
+      {
+        headers: {
+          Authorization: `Token token=${token}`,
+        },
       }
+    );
+
+    if (!response.data.length) {
+      throw {
+        message: "Given contact id is not present in CRM!!",
+      };
     }
 
     return res.status(200).send({ err: false, user: response.data });
@@ -138,7 +138,8 @@ const createContact = async (req, res) => {
       }
     );
 
-    return res.status(200)
+    return res
+      .status(200)
       .send({ err: false, message: "Contact created successfully" });
   } catch (error) {
     console.error(error);
@@ -199,40 +200,42 @@ const updateContact = async (req, res) => {
         .send({ err: false, message: "Contact updated successfully" });
     }
 
-    let response = await axios.get(`${freshwork_filterUrl}?q=${contact_id}&include=contact`
-    , {
-      headers: {
-        Authorization: `Token token=${token}`,
-      },
-    });
-
-    if(!response.data.length){
-      throw{
-        message: 'Given contact id is not present!!'
+    let response = await axios.get(
+      `${freshwork_filterUrl}?q=${contact_id}&include=contact`,
+      {
+        headers: {
+          Authorization: `Token token=${token}`,
+        },
       }
+    );
+
+    if (!response.data.length) {
+      throw {
+        message: "Given contact id is not present!!",
+      };
     }
 
     const id = response.data[0].id;
 
-    response = await axios.put(`${freshwork_contactUrl}/${id}`,
-    {
-      contact: {
-        mobile_number: new_mobile_number,
-        email: new_email
-      }
-    }
-    ,{
-      headers: {
-        Authorization: `Token token=${token}`,
+    response = await axios.put(
+      `${freshwork_contactUrl}/${id}`,
+      {
+        contact: {
+          mobile_number: new_mobile_number,
+          email: new_email,
+        },
       },
-    })
+      {
+        headers: {
+          Authorization: `Token token=${token}`,
+        },
+      }
+    );
 
     return res
       .status(200)
       .send({ err: false, message: "Contact updated successfully" });
-
   } catch (error) {
-
     console.log(error);
     return res.status(400).send({
       err: false,
@@ -243,7 +246,7 @@ const updateContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   try {
-    const {contact_id, data_store} = req.body;
+    const { contact_id, data_store } = req.body;
 
     if (!contact_id) {
       throw { message: `Contact id is required!` };
@@ -286,39 +289,38 @@ const deleteContact = async (req, res) => {
         .send({ err: false, message: "contact deleted successfully" });
     }
 
-    let response = await axios.get(`${freshwork_filterUrl}?q=${contact_id}&include=contact`
-    , {
+    let response = await axios.get(
+      `${freshwork_filterUrl}?q=${contact_id}&include=contact`,
+      {
+        headers: {
+          Authorization: `Token token=${token}`,
+        },
+      }
+    );
+
+    if (!response.data.length) {
+      throw {
+        message: "Given contact id is not present!!",
+      };
+    }
+
+    const id = response.data[0].id;
+
+    response = await axios.delete(`${freshwork_contactUrl}/${id}`, {
       headers: {
         Authorization: `Token token=${token}`,
       },
     });
 
-    if(!response.data.length){
-      throw{
-        message: 'Given contact id is not present!!'
-      }
-    }
-
-    const id = response.data[0].id;
-
-
-    response = await axios.delete(`${freshwork_contactUrl}/${id}`,{
-      headers: {
-        Authorization: `Token token=${token}`,
-      },
-    })
-
-
-    if(!response.data){
+    if (!response.data) {
       throw {
-        message: 'Something went wrong while deleting the contact'
-      }
+        message: "Something went wrong while deleting the contact",
+      };
     }
 
     return res
       .status(200)
       .send({ err: false, message: "Contact deleted successfully" });
-
   } catch (error) {
     return res.status(400).send({
       err: true,

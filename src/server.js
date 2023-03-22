@@ -1,8 +1,8 @@
-const experss = require('express');
+const experss = require("express");
 
-const { Server, createServer } = require('http');
+const { Server, createServer } = require("http");
 
-const CONFIG = require('./config')
+const CONFIG = require("./config");
 
 const startServer = (app) => {
   const httpServer = createServer(app);
@@ -14,5 +14,5 @@ const startServer = (app) => {
 };
 
 module.exports = {
-    startServer
-}
+  startServer,
+};

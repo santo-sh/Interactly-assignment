@@ -1,5 +1,5 @@
-const express = require('express');
-const routes = require('./routes');
+const express = require("express");
+const routes = require("./routes");
 
 const createApp = () => {
   const app = express();
@@ -10,7 +10,7 @@ const createApp = () => {
       extended: true,
     })
   );
-  app.use(express.json({ type: 'application/vnd.api+json' }));
+  app.use(express.json({ type: "application/vnd.api+json" }));
   // API Routes
   routes(app);
 
