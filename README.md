@@ -1,2 +1,1 @@
-# airtribe-assignment
 # Interactly-assignment
